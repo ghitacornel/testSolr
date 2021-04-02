@@ -1,9 +1,7 @@
 package client;
 
-import org.apache.http.impl.client.SystemDefaultHttpClient;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
-import org.apache.solr.client.solrj.impl.HttpClusterStateProvider;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 
@@ -15,12 +13,12 @@ public class Client {
 
     private static final String COLLECTION_NAME = "bigboxstore";
 
-    static private int type = 1;
+    static private int type = 0;
 
     public static SolrClient getClient() {
         if (type == 1) return getCloudSolrClient();
         if (type == 2) return getCloudSolrClientCluster();
-        return getHttpSolrClient();
+        return getHttpSolrClient1();
     }
 
     public static SolrClient getCloudSolrClient() {
@@ -35,9 +33,27 @@ public class Client {
 
     }
 
-    public static SolrClient getHttpSolrClient() {
+    public static SolrClient getHttpSolrClient1() {
 
         String urlString = "http://localhost:8981/solr/" + COLLECTION_NAME;
+        HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
+        client.setParser(new XMLResponseParser());
+        return client;
+
+    }
+
+    public static SolrClient getHttpSolrClient2() {
+
+        String urlString = "http://localhost:8982/solr/" + COLLECTION_NAME;
+        HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
+        client.setParser(new XMLResponseParser());
+        return client;
+
+    }
+
+    public static SolrClient getHttpSolrClient3() {
+
+        String urlString = "http://localhost:8983/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
         client.setParser(new XMLResponseParser());
         return client;
