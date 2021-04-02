@@ -5,7 +5,9 @@ import client.Client;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestCRUD {
@@ -17,6 +19,18 @@ public class TestCRUD {
 
     // 1 client for whole test
     SolrClient client = Client.getClient();
+
+    @Before
+    public void before() throws Exception {
+        client.deleteByQuery("*");
+        client.commit();
+    }
+
+    @After
+    public void after() throws Exception {
+        client.deleteByQuery("*");
+        client.commit();
+    }
 
     @Test
     public void testCRUD() throws Exception {

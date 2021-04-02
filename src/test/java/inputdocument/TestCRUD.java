@@ -1,38 +1,38 @@
-package beans;
+package inputdocument;
 
-import beans.model.Product;
+import beans.inputdocument.MyInputDocument;
 import client.Client;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrInputDocument;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestCRUDDifferentMachines {
+import java.util.Date;
 
-    Product product1 = new Product("1", "product one", "1110");
-    Product product2 = new Product("2", "product two", "2220");
-    Product product3 = new Product("3", "product three", "3330");
-    Product product4 = new Product("4", "product two one", "21210");
+public class TestCRUD {
+
+    SolrInputDocument document1 = new MyInputDocument(1, "ion", 11.10, new Date()).build();
+    SolrInputDocument document2 = new MyInputDocument(2, "gheorghe", 22.20, new Date()).build();
+    SolrInputDocument document3 = new MyInputDocument(3, "marin", 33.30, new Date()).build();
+    SolrInputDocument document4 = new MyInputDocument(4, "gheorghe gheorghe", 21.210, new Date()).build();
 
     // 1 client for whole test
     SolrClient client = Client.getClient();
-    SolrClient client1 = Client.getHttpSolrClient1();
-    SolrClient client2 = Client.getHttpSolrClient2();
-    SolrClient client3 = Client.getHttpSolrClient3();
 
     @Before
     public void before() throws Exception {
-        client1.deleteByQuery("*");
-        client1.commit();
+        client.deleteByQuery("*");
+        client.commit();
     }
 
     @After
     public void after() throws Exception {
-        client1.deleteByQuery("*");
-        client1.commit();
+        client.deleteByQuery("*");
+        client.commit();
     }
 
     @Test
@@ -40,68 +40,68 @@ public class TestCRUDDifferentMachines {
 
         // delete all
         {
-            client1.deleteByQuery("*");
-            client1.commit();
+            client.deleteByQuery("*");
+            client.commit();
         }
 
         // read all
         {
             SolrQuery query = new SolrQuery();
             query.set("q", "*");
-            QueryResponse response = client1.query(query);
+            QueryResponse response = client.query(query);
             Assert.assertTrue(response.getResults().isEmpty());
         }
 
         // create
         {
-            client1.addBean(product1);
-            client1.addBean(product2);
-            client1.addBean(product3);
-            client1.addBean(product4);
-            client1.commit();
+            client.add(document1);
+            client.add(document2);
+            client.add(document3);
+            client.add(document4);
+            client.commit();
         }
 
         // read all
         {
             SolrQuery query = new SolrQuery();
             query.set("q", "*");
-            QueryResponse response = client2.query(query);
+            QueryResponse response = client.query(query);
             Assert.assertEquals(4, response.getResults().size());
         }
 
         // read some
         {
             SolrQuery query = new SolrQuery();
-            query.set("q", "name:two");
-            QueryResponse response = client2.query(query);
+            query.set("q", "name:gheorghe");
+            QueryResponse response = client.query(query);
             Assert.assertEquals(2, response.getResults().size());
         }
 
         // delete by id
         {
-            client2.deleteById("4");
-            client2.commit();
+            client.deleteById("4");
+            client.commit();
         }
 
         // read some
         {
             SolrQuery query = new SolrQuery();
-            query.set("q", "name:two");
-            QueryResponse response = client3.query(query);
+            query.set("q", "name:gheorghe");
+            QueryResponse response = client.query(query);
             Assert.assertEquals(1, response.getResults().size());
         }
 
         // delete all
         {
-            client3.deleteByQuery("*");
-            client3.commit();
+            client.deleteByQuery("*");
+            client.commit();
         }
 
         // read all
         {
             SolrQuery query = new SolrQuery();
             query.set("q", "*");
-            QueryResponse response = client1.query(query);
+            QueryResponse response = client.query(query);
             Assert.assertTrue(response.getResults().isEmpty());
         }
 
