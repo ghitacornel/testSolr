@@ -22,13 +22,13 @@ public abstract class TestTemplate {
     protected SolrClient client2 = getHttpSolrClient2();
     protected SolrClient client3 = getHttpSolrClient3();
 
-    protected SolrClient getClient() {
+    private SolrClient getClient() {
         if (clientType == 1) return getCloudSolrClient();
         if (clientType == 2) return getCloudSolrClientCluster();
         return getHttpSolrClient1();
     }
 
-    protected SolrClient getCloudSolrClient() {
+    private SolrClient getCloudSolrClient() {
         List<String> zkServers = new ArrayList<>();
         zkServers.add("localhost:2181");
         zkServers.add("localhost:2182");
@@ -38,28 +38,28 @@ public abstract class TestTemplate {
         return client;
     }
 
-    protected SolrClient getHttpSolrClient1() {
+    private SolrClient getHttpSolrClient1() {
         String urlString = "http://localhost:8981/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
         client.setParser(new XMLResponseParser());
         return client;
     }
 
-    protected SolrClient getHttpSolrClient2() {
+    private SolrClient getHttpSolrClient2() {
         String urlString = "http://localhost:8982/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
         client.setParser(new XMLResponseParser());
         return client;
     }
 
-    protected SolrClient getHttpSolrClient3() {
+    private SolrClient getHttpSolrClient3() {
         String urlString = "http://localhost:8983/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
         client.setParser(new XMLResponseParser());
         return client;
     }
 
-    protected SolrClient getCloudSolrClientCluster() {
+    private SolrClient getCloudSolrClientCluster() {
         List<String> zkServers = new ArrayList<>();
         zkServers.add("localhost:2181");
         zkServers.add("localhost:2182");
