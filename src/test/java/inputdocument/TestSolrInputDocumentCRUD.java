@@ -10,7 +10,7 @@ import setup.TestTemplate;
 
 import java.util.Date;
 
-public class TestCRUD extends TestTemplate {
+public class TestSolrInputDocumentCRUD extends TestTemplate {
 
     SolrInputDocument document1 = new MyInputDocument(1, "ion", 11.10, new Date()).build();
     SolrInputDocument document2 = new MyInputDocument(2, "gheorghe", 22.20, new Date()).build();

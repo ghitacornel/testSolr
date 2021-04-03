@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import setup.TestTemplate;
 
-public class TestCRUD extends TestTemplate {
+public class TestBeansCRUD extends TestTemplate {
 
     Product product1 = new Product("1", "product one", "1110");
     Product product2 = new Product("2", "product two", "2220");
