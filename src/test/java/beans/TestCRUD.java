@@ -1,36 +1,18 @@
 package beans;
 
 import beans.model.Product;
-import client.Client;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import setup.TestTemplate;
 
-public class TestCRUD {
+public class TestCRUD extends TestTemplate {
 
     Product product1 = new Product("1", "product one", "1110");
     Product product2 = new Product("2", "product two", "2220");
     Product product3 = new Product("3", "product three", "3330");
     Product product4 = new Product("4", "product two one", "21210");
-
-    // 1 client for whole test
-    SolrClient client = Client.getClient();
-
-    @Before
-    public void before() throws Exception {
-        client.deleteByQuery("*");
-        client.commit();
-    }
-
-    @After
-    public void after() throws Exception {
-        client.deleteByQuery("*");
-        client.commit();
-    }
 
     @Test
     public void testCRUD() throws Exception {

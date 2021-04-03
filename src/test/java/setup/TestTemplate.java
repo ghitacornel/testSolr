@@ -1,27 +1,35 @@
-package client;
+package setup;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
+import org.junit.After;
+import org.junit.Before;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Client {
+public abstract class TestTemplate {
+
 
     private static final String COLLECTION_NAME = "bigboxstore";
 
-    static private int type = 0;
+    private int type = 0;
 
-    public static SolrClient getClient() {
+    protected SolrClient client = getClient();
+    protected SolrClient client1 = getHttpSolrClient1();
+    protected SolrClient client2 = getHttpSolrClient2();
+    protected SolrClient client3 = getHttpSolrClient3();
+
+    protected SolrClient getClient() {
         if (type == 1) return getCloudSolrClient();
         if (type == 2) return getCloudSolrClientCluster();
         return getHttpSolrClient1();
     }
 
-    public static SolrClient getCloudSolrClient() {
+    protected SolrClient getCloudSolrClient() {
 
         List<String> zkServers = new ArrayList<>();
         zkServers.add("localhost:2181");
@@ -33,7 +41,7 @@ public class Client {
 
     }
 
-    public static SolrClient getHttpSolrClient1() {
+    protected SolrClient getHttpSolrClient1() {
 
         String urlString = "http://localhost:8981/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
@@ -42,7 +50,7 @@ public class Client {
 
     }
 
-    public static SolrClient getHttpSolrClient2() {
+    protected SolrClient getHttpSolrClient2() {
 
         String urlString = "http://localhost:8982/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
@@ -51,7 +59,7 @@ public class Client {
 
     }
 
-    public static SolrClient getHttpSolrClient3() {
+    protected SolrClient getHttpSolrClient3() {
 
         String urlString = "http://localhost:8983/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
@@ -60,7 +68,7 @@ public class Client {
 
     }
 
-    public static SolrClient getCloudSolrClientCluster() {
+    protected SolrClient getCloudSolrClientCluster() {
 
         List<String> zkServers = new ArrayList<>();
         zkServers.add("localhost:2181");
@@ -70,6 +78,13 @@ public class Client {
         client.setDefaultCollection(COLLECTION_NAME);
         return client;
 
+    }
+
+    @Before
+    @After
+    public void deleteAll() throws Exception {
+        client.deleteByQuery("*");
+        client.commit();
     }
 
 }
