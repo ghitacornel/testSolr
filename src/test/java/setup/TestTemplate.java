@@ -13,10 +13,9 @@ import java.util.Optional;
 
 public abstract class TestTemplate {
 
-
     private static final String COLLECTION_NAME = "bigboxstore";
 
-    private int type = 0;
+    private int clientType = 0;
 
     protected SolrClient client = getClient();
     protected SolrClient client1 = getHttpSolrClient1();
@@ -24,13 +23,12 @@ public abstract class TestTemplate {
     protected SolrClient client3 = getHttpSolrClient3();
 
     protected SolrClient getClient() {
-        if (type == 1) return getCloudSolrClient();
-        if (type == 2) return getCloudSolrClientCluster();
+        if (clientType == 1) return getCloudSolrClient();
+        if (clientType == 2) return getCloudSolrClientCluster();
         return getHttpSolrClient1();
     }
 
     protected SolrClient getCloudSolrClient() {
-
         List<String> zkServers = new ArrayList<>();
         zkServers.add("localhost:2181");
         zkServers.add("localhost:2182");
@@ -38,38 +36,30 @@ public abstract class TestTemplate {
         CloudSolrClient client = new CloudSolrClient.Builder(zkServers, Optional.empty()).build();
         client.setDefaultCollection(COLLECTION_NAME);
         return client;
-
     }
 
     protected SolrClient getHttpSolrClient1() {
-
         String urlString = "http://localhost:8981/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
         client.setParser(new XMLResponseParser());
         return client;
-
     }
 
     protected SolrClient getHttpSolrClient2() {
-
         String urlString = "http://localhost:8982/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
         client.setParser(new XMLResponseParser());
         return client;
-
     }
 
     protected SolrClient getHttpSolrClient3() {
-
         String urlString = "http://localhost:8983/solr/" + COLLECTION_NAME;
         HttpSolrClient client = new HttpSolrClient.Builder(urlString).build();
         client.setParser(new XMLResponseParser());
         return client;
-
     }
 
     protected SolrClient getCloudSolrClientCluster() {
-
         List<String> zkServers = new ArrayList<>();
         zkServers.add("localhost:2181");
         zkServers.add("localhost:2182");
@@ -77,7 +67,6 @@ public abstract class TestTemplate {
         CloudSolrClient client = new CloudSolrClient.Builder(zkServers, Optional.empty()).build();
         client.setDefaultCollection(COLLECTION_NAME);
         return client;
-
     }
 
     @Before
